@@ -11,6 +11,6 @@ notifications:
 
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.test("Elementwise", coverage=true)'
+  - julia -e 'Pkg.clone(pwd()); Pkg.clone( "git@github.com:sabjohnso/Applicator.jl.git" ); Pkg.test("Elementwise", coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("Elementwise")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
