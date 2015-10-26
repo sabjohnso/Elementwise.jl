@@ -40,11 +40,18 @@ defined for subtypes of AbstracftElementwise.
 "
 abstract AbstractElementwise
 
+
+#
+# ... Type predicate
+#
+
 isElementwise( x ) = typeof( x ) <: AbstractElementwise
 
 #
-apply_unary( f, x::AbstractElementwise ) = map( f, x )
+# ... Function application methods
+#
 
+apply_unary( f, x::AbstractElementwise ) = map( f, x )
 apply_binary{ T <: AbstractElementwise }( f, x::T, y::T ) = map( f, x, y )
 apply_binary{ T <: AbstractElementwise }( f, x::T, y ) = map( x -> f( x, y ), x )
 apply_binary{ T <: AbstractElementwise }( f, x, y::T ) = map( y -> f( x, y ), y )
