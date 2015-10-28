@@ -40,11 +40,9 @@ square( x ) = x*x
 
 facts( "Elementwise" ) do
     
-    @fact isElementwise( 2 ) --> false
-    
     a = MyElementwise( 1, 2, 3 )
 
-    @fact isElementwise( a ) --> true
+
     @fact apply_unary( twice,  a ) --> MyElementwise( 2, 4, 6 )
     @fact apply_unary( square, a ) --> MyElementwise( 1, 4, 9 )
     @fact apply_binary( +, a, 1 ) --> MyElementwise( 2, 3, 4 )
@@ -52,7 +50,7 @@ facts( "Elementwise" ) do
 
     b = MyElementwise( 4, 5, 6 )
 
-    @fact isElementwise( b ) --> true
+
     @fact apply_binary( +, a, b ) --> MyElementwise( 5, 7, 9 )
 
 

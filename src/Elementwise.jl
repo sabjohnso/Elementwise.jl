@@ -31,6 +31,30 @@ export AbstractElementwise, isElementwise, apply_unary, apply_binary
 
 
 "
+@make_elementwise( T, args ... )
+--------------------------------
+An unhygienic macro do derive methods for 
+`apply_unary and `apply_binary` based the
+`map` methods.
+"
+macro make_elementwise( T, args ... )
+    if length( args ) == 1
+        Alt = args[ 1 ]
+    else
+        Alt = :Any
+    end
+    esc(quote
+          apply_unary( f, x::$T ) = map( f, x )
+          apply_binary( f, x::$T, y::$T ) = map( f, x, y )
+          apply_binary( f, x::$T, y::$Alt ) = map( x -> f( x, y ), x )
+          apply_binary( f, x::$Alt, y::$T ) = map( y -> f( x, y ), y )
+        end)
+end
+
+
+
+
+"
 AbstractElementwise
 -------------------
 An abstract type facilitating the construction of types that
@@ -41,19 +65,22 @@ defined for subtypes of AbstracftElementwise.
 abstract AbstractElementwise
 
 
-#
-# ... Type predicate
-#
+# #
+# # ... Type predicate
+# #
 
-isElementwise( x ) = typeof( x ) <: AbstractElementwise
+# isElementwise( x ) = typeof( x ) <: AbstractElementwise
 
-#
-# ... Function application methods
-#
+# #
+# # ... Function application methods
+# #
 
-apply_unary( f, x::AbstractElementwise ) = map( f, x )
-apply_binary{ T <: AbstractElementwise }( f, x::T, y::T ) = map( f, x, y )
-apply_binary{ T <: AbstractElementwise }( f, x::T, y ) = map( x -> f( x, y ), x )
-apply_binary{ T <: AbstractElementwise }( f, x, y::T ) = map( y -> f( x, y ), y )
+# apply_unary( f, x::AbstractElementwise ) = map( f, x )
+# apply_binary{ T <: AbstractElementwise }( f, x::T, y::T ) = map( f, x, y )
+# apply_binary{ T <: AbstractElementwise }( f, x::T, y ) = map( x -> f( x, y ), x )
+# apply_binary{ T <: AbstractElementwise }( f, x, y::T ) = map( y -> f( x, y ), y )
+
+@make_elementwise AbstractElementwise
+
 
 end # module
